@@ -24,8 +24,7 @@ public class KubeController {
     return kubeService.getAllKubes();
   }
 
-  @GetMapping
-  @RequestMapping("/{id}")
+  @GetMapping(path = "/{id}")
   public Optional<Kube> getKubeById(@PathVariable Long id){
     return kubeService.getKubeById(id);
   }
@@ -35,9 +34,14 @@ public class KubeController {
     kubeService.createKube(kube);
   }
 
-  @DeleteMapping
-  @RequestMapping("/1/{id}")
+  @DeleteMapping(path = "/{id}")
   public void deleteKube(@PathVariable Long id){
     kubeService.deleteKube(id);
   }
+
+  @PostMapping(path = "/{id}/add")
+  public void addKubes(@PathVariable Long id){
+    kubeService.addKubes(id);
+  }
+
 }
