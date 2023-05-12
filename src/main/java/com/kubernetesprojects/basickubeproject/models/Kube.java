@@ -1,4 +1,4 @@
-package com.kubernetesprojects.basickubeproject;
+package com.kubernetesprojects.basickubeproject.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
