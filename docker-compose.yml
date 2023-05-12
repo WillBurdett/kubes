@@ -3,6 +3,7 @@ services:
   kubedb:
     platform: linux/x86_64
     image: mysql:5.7
+    restart: unless-stopped
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=kubedb
@@ -10,5 +11,17 @@ services:
       - "3306:3306"
     volumes:
       - data:/data
+  kubes:
+    image: kubes:latest
+    container_name: kubes
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    depends_on:
+      - kubedb
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://kubedb:3306/kubedb?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: password
 volumes:
   data: {}
