@@ -1,0 +1,14 @@
+version: "3"
+services:
+  kubedb:
+    platform: linux/x86_64
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=kubedb
+    ports:
+      - "3306:3306"
+    volumes:
+      - data:/data
+volumes:
+  data: {}
