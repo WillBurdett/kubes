@@ -39,9 +39,14 @@ public class KubeController {
     kubeService.deleteKube(id);
   }
 
-  @PostMapping(path = "/{id}/add")
+  @PostMapping(path = "/{id}/+")
   public void addKubes(@PathVariable Long id){
     kubeService.addKubes(id);
+  }
+
+  @PostMapping(path = "/{id}/-")
+  public void subtractKubes(@PathVariable Long id){
+    kubeService.subtractKubes(id);
   }
 
 }

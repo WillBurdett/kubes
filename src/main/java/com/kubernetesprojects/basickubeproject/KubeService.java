@@ -39,4 +39,17 @@ public class KubeService {
       kubeRepository.save(kube);
     }
   }
+
+  public void subtractKubes(Long id) {
+    Optional<Kube> optionalKube = kubeRepository.findById(id);
+
+    if (optionalKube.isPresent()){
+      Kube kube = optionalKube.get();
+      String currentDimensions = kube.getDimensions();
+      String[] arr = currentDimensions.split("x");
+      String str = String.format("%sx%s", Integer.parseInt(arr[0])-1,Integer.parseInt(arr[1])-1);
+      kube.setDimensions(str);
+      kubeRepository.save(kube);
+    }
+  }
 }
