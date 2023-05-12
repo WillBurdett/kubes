@@ -27,29 +27,33 @@ public class KubeService {
     kubeRepository.deleteById(id);
   }
 
-  public void addKubes(Long id) {
+  public void alterKubes(Long id, String arithmeticOperator) {
     Optional<Kube> optionalKube = kubeRepository.findById(id);
 
     if (optionalKube.isPresent()){
       Kube kube = optionalKube.get();
-      String currentDimensions = kube.getDimensions();
-      String[] arr = currentDimensions.split("x");
-      String str = String.format("%sx%s", Integer.parseInt(arr[0])+1,Integer.parseInt(arr[1])+1);
-      kube.setDimensions(str);
-      kubeRepository.save(kube);
-    }
-  }
+      int currentWidth = convertDimensionsToInt(kube.getDimensions());
+      switch (arithmeticOperator){
+        case "+":
+          currentWidth++;
+          break;
+        case "-":
+          currentWidth--;
+          break;
+        }
+       if (currentWidth <= 0){
+         throw new ZeroOrNegativeDimensionsNotAllowed("Cannot perform operation as dimensions would equal or fall "
+             + "below zero");
+       }
 
-  public void subtractKubes(Long id) {
-    Optional<Kube> optionalKube = kubeRepository.findById(id);
-
-    if (optionalKube.isPresent()){
-      Kube kube = optionalKube.get();
-      String currentDimensions = kube.getDimensions();
-      String[] arr = currentDimensions.split("x");
-      String str = String.format("%sx%s", Integer.parseInt(arr[0])-1,Integer.parseInt(arr[1])-1);
-      kube.setDimensions(str);
+      kube.setDimensions(String.format("%sx%s", currentWidth, currentWidth));
       kubeRepository.save(kube);
+      }
     }
-  }
+
+    public int convertDimensionsToInt(String dimensions){
+      String[] strArr = dimensions.split("x");
+      return Integer.parseInt(strArr[0]);
+    }
+
 }
