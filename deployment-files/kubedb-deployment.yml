@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubedb-deployment
+  labels:
+    app: kubedb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubedb
+  template:
+    metadata:
+      labels:
+        app: kubedb
+    spec:
+      containers:
+      - name: kubedb
+        image: mysql
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: kube-secret
+              key: kubedb-database
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom: 
+            secretKeyRef:
+              name: kube-secret
+              key: kubedb-root-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubedb-service
+spec:
+  selector:
+    app: kubedb
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
