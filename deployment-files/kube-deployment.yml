@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-app
+  labels:
+    app: kube-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kube-app
+  template:
+    metadata:
+      labels:
+        app: kube-app
+    spec:
+      containers:
+      - name: kube-app
+        image: willburdett/kubes:v4
+        ports:
+        - containerPort: 8080
+        env:
+          - name: DB_HOST   # Setting Database host address
+            value: kubedb-service
+          - name: DB_NAME  # Setting Database name
+            value: kubedb
+          - name: DB_USERNAME  # Setting Database username
+            value: root
+          - name: DB_PASSWORD # Setting Database password
+            value: password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-app-service
+spec:
+  selector:
+    app: kube-app
+  type: LoadBalancer  
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30001
