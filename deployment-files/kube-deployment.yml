@@ -20,14 +20,26 @@ spec:
         ports:
         - containerPort: 8080
         env:
-          - name: DB_HOST   # Setting Database host address
-            value: kubedb-service
-          - name: DB_NAME  # Setting Database name
-            value: kubedb
-          - name: DB_USERNAME  # Setting Database username
-            value: root
-          - name: DB_PASSWORD # Setting Database password
-            value: password
+        - name: DB_HOST   # Setting Database host address
+          valueFrom: 
+            configMapKeyRef:
+              name: kube-configmap
+              key: database_url
+        - name: DB_NAME  # Setting Database name
+          valueFrom:
+            secretKeyRef:
+              name: kube-secret
+              key: kubedb-database
+        - name: DB_USERNAME  # Setting Database username
+          valueFrom:
+            secretKeyRef:
+              name: kube-secret
+              key: kubedb-root-username
+        - name: DB_PASSWORD # Setting Database password
+          valueFrom:
+            secretKeyRef:
+              name: kube-secret
+              key: kubedb-root-password
 ---
 apiVersion: v1
 kind: Service

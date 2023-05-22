@@ -21,9 +21,15 @@ spec:
         - containerPort: 3306
         env:
         - name: MYSQL_DATABASE
-          value: kubedb   
+          valueFrom:
+            secretKeyRef:
+              name: kube-secret
+              key: kubedb-database 
         - name: MYSQL_ROOT_PASSWORD
-          value: password
+          valueFrom:
+            secretKeyRef:
+              name: kube-secret
+              key: kubedb-root-password
 ---
 apiVersion: v1
 kind: Service
